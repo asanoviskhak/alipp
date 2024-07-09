@@ -7,13 +7,21 @@ type Token struct {
 	Literal string
 }
 
-const ( 
+const (
 	ILLEGAL = "ILLEGAL"
 	EOF 	= "EOF"
 	IDENT 	= "IDENT"
 	INT 	= "INT"
-	ASSIGN 	= "ASSIGN"
-	PLUS 	= "+"
+
+	// Operators
+	ASSIGN   	= "="
+    PLUS     	= "+"
+    MINUS    	= "-"
+    EXCLAMATION = "!"
+    ASTERISK 	= "*"
+    SLASH   	= "/"
+	LT		 	= "<"
+	GT 		 	= ">"
 
     // Delimiters
     COMMA     = ","

@@ -48,11 +48,47 @@ func (lexerInstance *Lexer) readCharUnicode() {
 	lexerInstance.readPosition += 1
 }
 
+func (lexerInstance *Lexer) consumeWhitespace() {
+	for lexerInstance.ch == ' ' || lexerInstance.ch == '\t' || lexerInstance.ch == '\n' || lexerInstance.ch == '\r' {
+		lexerInstance.readChar()
+	}
+}
+
+func (lexerInstance *Lexer) readNumber() string {
+	position := lexerInstance.position
+	for isDigit(lexerInstance.ch) {
+		lexerInstance.readChar()
+	}
+
+	return lexerInstance.input[position:lexerInstance.position]
+}
+
+func isDigit(ch byte) bool {
+	return '0' <= ch && ch <= '9'
+}
+
 func (lexerInstance *Lexer) NextToken() token.Token {
 	var tok token.Token
+
+	lexerInstance.consumeWhitespace()
+
 	switch lexerInstance.ch {
 	case '=':
 		tok = newToken(token.ASSIGN, lexerInstance.ch)
+	case '+':
+		tok = newToken(token.PLUS, lexerInstance.ch)
+	case '-':
+		tok = newToken(token.MINUS, lexerInstance.ch)
+	case '!':
+		tok = newToken(token.EXCLAMATION, lexerInstance.ch)
+	case '/':
+		tok = newToken(token.SLASH, lexerInstance.ch)
+	case '*':
+		tok = newToken(token.ASTERISK, lexerInstance.ch)
+	case '<':
+		tok = newToken(token.LT, lexerInstance.ch)
+	case '>':
+		tok = newToken(token.GT, lexerInstance.ch)
 	case ';':
 		tok = newToken(token.SEMICOLON, lexerInstance.ch)
 	case '(':
@@ -61,8 +97,6 @@ func (lexerInstance *Lexer) NextToken() token.Token {
         tok = newToken(token.RPAREN, lexerInstance.ch)
     case ',':
         tok = newToken(token.COMMA, lexerInstance.ch)
-    case '+':
-        tok = newToken(token.PLUS, lexerInstance.ch)
     case '{':
         tok = newToken(token.LBRACE, lexerInstance.ch)
     case '}':
@@ -73,6 +107,11 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 	default:
 		if isLetter(lexerInstance.ch) {
 			tok.Literal = lexerInstance.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+			return tok
+		} else if isDigit(lexerInstance.ch) {
+			tok.Type = token.INT
+			tok.Literal = lexerInstance.readNumber()
 			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, lexerInstance.ch)
