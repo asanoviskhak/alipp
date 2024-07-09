@@ -19,7 +19,7 @@ To start using Alipp, follow these simple steps:
 1. Install the Alipp compiler by running the following command:
 
     ```
-    npm install -g Alipp
+    TOWRITE
     ```
 
 2. Create a new Alipp file with the `.alip` extension.
@@ -29,7 +29,7 @@ To start using Alipp, follow these simple steps:
 4. Compile your Alipp code to JavaScript by running the following command:
 
     ```
-    Alipp compile your-file.alipp
+    TOWRITE
     ```
 
 5. Use the generated JavaScript file in your projects, just like any other JavaScript file.
