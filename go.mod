@@ -1,3 +1,3 @@
-module github.com/asanoviskhak/alipp/src
+module github.com/asanoviskhak/alipp
 
 go 1.22.3
