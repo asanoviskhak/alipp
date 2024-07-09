@@ -17,6 +17,9 @@ func isLetter(ch byte) bool {
     return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
+func isDigit(ch byte) bool {
+	return '0' <= ch && ch <= '9'
+}
 
 func (lexerInstance *Lexer) readIdentifier() string {
     position := lexerInstance.position
@@ -63,8 +66,12 @@ func (lexerInstance *Lexer) readNumber() string {
 	return lexerInstance.input[position:lexerInstance.position]
 }
 
-func isDigit(ch byte) bool {
-	return '0' <= ch && ch <= '9'
+func (lexerInstance *Lexer) peekChar() byte {
+	if lexerInstance.readPosition >= len(lexerInstance.input) {
+		return 0
+	} else {
+		return lexerInstance.input[lexerInstance.readPosition]
+	}
 }
 
 func (lexerInstance *Lexer) NextToken() token.Token {
@@ -74,13 +81,27 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 
 	switch lexerInstance.ch {
 	case '=':
-		tok = newToken(token.ASSIGN, lexerInstance.ch)
+		if lexerInstance.peekChar() == '=' {
+			ch := lexerInstance.ch
+			lexerInstance.readChar()
+			literal := string(ch) + string(lexerInstance.ch)
+			tok = token.Token{Type: token.EQ, Literal: literal}
+		} else {
+			tok = newToken(token.ASSIGN, lexerInstance.ch)
+		}
 	case '+':
 		tok = newToken(token.PLUS, lexerInstance.ch)
 	case '-':
 		tok = newToken(token.MINUS, lexerInstance.ch)
 	case '!':
-		tok = newToken(token.EXCLAMATION, lexerInstance.ch)
+		if lexerInstance.peekChar() == '=' {
+			ch := lexerInstance.ch
+			lexerInstance.readChar()
+			literal := string(ch) + string(lexerInstance.ch)
+			tok = token.Token{Type: token.NOT_EQ, Literal: literal}
+		} else {
+			tok = newToken(token.EXCLAMATION, lexerInstance.ch)
+		}
 	case '/':
 		tok = newToken(token.SLASH, lexerInstance.ch)
 	case '*':
