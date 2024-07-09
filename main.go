@@ -14,7 +14,8 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("Hello %s! This is the Alipp programming language!\n", user.Username)
-	fmt.Printf("Feel free to explore it\n")
+	fmt.Printf("Салам %s! Бул alipp программалоо тили!\n", user.Username)
+	fmt.Printf("Өзүңүз каалагандай тилди изилдеп көрүңүз\n\n")
+	fmt.Printf("Бул жерден чыгуу үчүн Ctrl жана C баскычтарын басыңыз\n\n")
 	repl.Start(os.Stdin, os.Stdout)
 }
