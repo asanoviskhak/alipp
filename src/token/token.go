@@ -35,6 +35,11 @@ const (
     // Keywords
     FUNCTION = "FUNCTION"
     LET      = "LET"
+	TRUE     = "TRUE"
+    FALSE    = "FALSE"
+    IF       = "IF"
+    ELSE     = "ELSE"
+    RETURN   = "RETURN"
 
 	// Excerpt From
 	// Writing An Interpreter In Go
@@ -45,6 +50,11 @@ const (
 var keywords = map[string]TokenType {
 	"fn": FUNCTION,
 	"let": LET,
+	"true": TRUE,
+	"false":  FALSE,
+    "if":     IF,
+    "else":   ELSE,
+    "return": RETURN,
 }
 
 func LookupIdent(ident string) TokenType {
