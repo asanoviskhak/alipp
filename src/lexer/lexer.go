@@ -12,16 +12,40 @@ type Lexer struct {
 	chUnicode		rune
 }
 
-func (l *Lexer) readIdentifier() string {
-    position := l.position
-    for isLetter(l.ch) {
-        l.readChar()
-    }
-    return l.input[position:l.position]
-}
 
 func isLetter(ch byte) bool {
     return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+
+func (lexerInstance *Lexer) readIdentifier() string {
+    position := lexerInstance.position
+    for isLetter(lexerInstance.ch) {
+        lexerInstance.readChar()
+    }
+    return lexerInstance.input[position:lexerInstance.position]
+}
+
+func (lexerInstance *Lexer) readChar() {
+	if lexerInstance.readPosition >= len(lexerInstance.input) {
+		lexerInstance.ch = 0
+	} else {
+		lexerInstance.ch = lexerInstance.input[lexerInstance.readPosition]
+	}
+
+	lexerInstance.position = lexerInstance.readPosition
+	lexerInstance.readPosition += 1
+}
+
+func (lexerInstance *Lexer) readCharUnicode() {
+	if lexerInstance.readPosition >= len(lexerInstance.input) {
+		lexerInstance.chUnicode = 0
+	} else {
+		lexerInstance.chUnicode = rune(lexerInstance.input[lexerInstance.readPosition])
+	}
+
+	lexerInstance.position = lexerInstance.readPosition
+	lexerInstance.readPosition += 1
 }
 
 func (lexerInstance *Lexer) NextToken() token.Token {
@@ -54,7 +78,8 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 			tok = newToken(token.ILLEGAL, lexerInstance.ch)
 		}
 	}
-
+	// Before returning the token we advance our pointers into the 
+	// input so when we call NextToken() again the lexerInstance.ch field is already updated.
 	lexerInstance.readChar()
 	return tok
 }
@@ -75,25 +100,5 @@ func NewUnicode(input string) *Lexer {
 	return lexerInstance
 }
 
-func (lexerInstance *Lexer) readChar() {
-	if lexerInstance.readPosition >= len(lexerInstance.input) {
-		lexerInstance.ch = 0
-	} else {
-		lexerInstance.ch = lexerInstance.input[lexerInstance.readPosition]
-	}
 
-	lexerInstance.position = lexerInstance.readPosition
-	lexerInstance.readPosition += 1
-}
-
-func (lexerInstance *Lexer) readCharUnicode() {
-	if lexerInstance.readPosition >= len(lexerInstance.input) {
-		lexerInstance.chUnicode = 0
-	} else {
-		lexerInstance.chUnicode = rune(lexerInstance.input[lexerInstance.readPosition])
-	}
-
-	lexerInstance.position = lexerInstance.readPosition
-	lexerInstance.readPosition += 1
-}
 
