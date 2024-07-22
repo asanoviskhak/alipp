@@ -3,45 +3,45 @@ package token
 type TokenType string
 
 type Token struct {
-	Type TokenType
+	Type    TokenType
 	Literal string
 }
 
 const (
-	ILLEGAL = "ILLEGAL"
-	EOF 	= "EOF"
-	IDENT 	= "IDENT"
-	INT 	= "INT"
+	ILLEGAL = "ТУУРА_ЭМЕС"
+	EOF     = "БҮТТҮ"
+	IDENT   = "ИДЕНТИФИКАТОР"
+	INT     = "БҮТҮН_САН"
 
 	// Operators
-	ASSIGN   	= "="
-    PLUS     	= "+"
-    MINUS    	= "-"
-    EXCLAMATION = "!"
-    ASTERISK 	= "*"
-    SLASH   	= "/"
-	LT		 	= "<"
-	GT 		 	= ">"
-	EQ			= "=="
-	NOT_EQ		= "!="
+	ASSIGN      = "="
+	PLUS        = "+"
+	MINUS       = "-"
+	EXCLAMATION = "!"
+	ASTERISK    = "*"
+	SLASH       = "/"
+	LT          = "<"
+	GT          = ">"
+	EQ          = "=="
+	NOT_EQ      = "!="
 
-    // Delimiters
-    COMMA     = ","
-    SEMICOLON = ";"
+	// Delimiters
+	COMMA     = ","
+	SEMICOLON = ";"
 
-    LPAREN = "("
-    RPAREN = ")"
-    LBRACE = "{"
-    RBRACE = "}"
+	LPAREN = "("
+	RPAREN = ")"
+	LBRACE = "{"
+	RBRACE = "}"
 
-    // Keywords
-    FUNCTION = "FUNCTION"
-    LET      = "LET"
-	TRUE     = "TRUE"
-    FALSE    = "FALSE"
-    IF       = "IF"
-    ELSE     = "ELSE"
-    RETURN   = "RETURN"
+	// Keywords
+	FUNCTION = "ФУНКЦИЯ"
+	LET      = "БЕР"
+	TRUE     = "ТУУРА"
+	FALSE    = "КАТА"
+	IF       = "ЭГЕР"
+	ELSE     = "ЖЕ"
+	RETURN   = "КАЙТАР"
 
 	// Excerpt From
 	// Writing An Interpreter In Go
@@ -49,14 +49,15 @@ const (
 	// This material may be protected by copyright.
 )
 
-var keywords = map[string]TokenType {
-	"fn": FUNCTION,
-	"let": LET,
-	"true": TRUE,
-	"false":  FALSE,
-    "if":     IF,
-    "else":   ELSE,
-    "return": RETURN,
+var keywords = map[string]TokenType{
+	"функция": FUNCTION,
+	"функ":    FUNCTION,
+	"бер":     LET,
+	"туура":   TRUE,
+	"ката":    FALSE,
+	"эгер":    IF,
+	"же":      ELSE,
+	"кайтар":  RETURN,
 }
 
 func LookupIdent(ident string) TokenType {
