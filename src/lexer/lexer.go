@@ -7,7 +7,7 @@ import (
 )
 
 type Lexer struct {
-	input        string
+	input        []rune
 	position     int
 	readPosition int
 	ch           rune
@@ -26,17 +26,16 @@ func (lexerInstance *Lexer) readIdentifier() string {
 	for isLetter(lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
-	runes := []rune(lexerInstance.input)
-	slicedRunes := runes[position:lexerInstance.position]
+	slicedRunes := lexerInstance.input[position:lexerInstance.position]
 	return string(slicedRunes)
 }
 
 func (lexerInstance *Lexer) readChar() {
-	runes := []rune(lexerInstance.input)
-	if lexerInstance.readPosition >= len(runes) {
+
+	if lexerInstance.readPosition >= len(lexerInstance.input) {
 		lexerInstance.ch = 0
 	} else {
-		lexerInstance.ch = runes[lexerInstance.readPosition]
+		lexerInstance.ch = lexerInstance.input[lexerInstance.readPosition]
 	}
 
 	lexerInstance.position = lexerInstance.readPosition
@@ -54,17 +53,14 @@ func (lexerInstance *Lexer) readNumber() string {
 	for isDigit(lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
-	runes := []rune(lexerInstance.input)
-	slicedRunes := runes[position:lexerInstance.position]
-	return string(slicedRunes)
+	return string(lexerInstance.input[position:lexerInstance.position])
 }
 
 func (lexerInstance *Lexer) peekChar() rune {
-	runes := []rune(lexerInstance.input)
-	if lexerInstance.readPosition >= len(runes) {
+	if lexerInstance.readPosition >= len(lexerInstance.input) {
 		return 0
 	} else {
-		return runes[lexerInstance.readPosition]
+		return lexerInstance.input[lexerInstance.readPosition]
 	}
 }
 
@@ -142,7 +138,9 @@ func newToken(tokenType token.TokenType, ch rune) token.Token {
 }
 
 func New(input string) *Lexer {
-	lexerInstance := &Lexer{input: input}
+	// We convert to runes so we can support UTF-8 characters.
+	runes := []rune(input)
+	lexerInstance := &Lexer{input: runes}
 	lexerInstance.readChar()
 	return lexerInstance
 }
