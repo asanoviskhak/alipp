@@ -1,50 +1,42 @@
 package lexer
 
 import (
+	"unicode"
+
 	"github.com/asanoviskhak/alipp/src/token"
 )
 
 type Lexer struct {
-	input 			string
-	position 		int
-	readPosition 	int
-	ch 				byte
-	chUnicode		rune
+	input        string
+	position     int
+	readPosition int
+	ch           rune
 }
 
-
-func isLetter(ch byte) bool {
-    return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+func isLetter(ch rune) bool {
+	return unicode.IsLetter(ch) || ch == '_'
 }
 
-func isDigit(ch byte) bool {
-	return '0' <= ch && ch <= '9'
+func isDigit(ch rune) bool {
+	return unicode.IsDigit(ch)
 }
 
 func (lexerInstance *Lexer) readIdentifier() string {
-    position := lexerInstance.position
-    for isLetter(lexerInstance.ch) {
-        lexerInstance.readChar()
-    }
-    return lexerInstance.input[position:lexerInstance.position]
+	position := lexerInstance.position
+	for isLetter(lexerInstance.ch) {
+		lexerInstance.readChar()
+	}
+	runes := []rune(lexerInstance.input)
+	slicedRunes := runes[position:lexerInstance.position]
+	return string(slicedRunes)
 }
 
 func (lexerInstance *Lexer) readChar() {
-	if lexerInstance.readPosition >= len(lexerInstance.input) {
+	runes := []rune(lexerInstance.input)
+	if lexerInstance.readPosition >= len(runes) {
 		lexerInstance.ch = 0
 	} else {
-		lexerInstance.ch = lexerInstance.input[lexerInstance.readPosition]
-	}
-
-	lexerInstance.position = lexerInstance.readPosition
-	lexerInstance.readPosition += 1
-}
-
-func (lexerInstance *Lexer) readCharUnicode() {
-	if lexerInstance.readPosition >= len(lexerInstance.input) {
-		lexerInstance.chUnicode = 0
-	} else {
-		lexerInstance.chUnicode = rune(lexerInstance.input[lexerInstance.readPosition])
+		lexerInstance.ch = runes[lexerInstance.readPosition]
 	}
 
 	lexerInstance.position = lexerInstance.readPosition
@@ -52,7 +44,7 @@ func (lexerInstance *Lexer) readCharUnicode() {
 }
 
 func (lexerInstance *Lexer) consumeWhitespace() {
-	for lexerInstance.ch == ' ' || lexerInstance.ch == '\t' || lexerInstance.ch == '\n' || lexerInstance.ch == '\r' {
+	if unicode.IsSpace(lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
 }
@@ -62,15 +54,17 @@ func (lexerInstance *Lexer) readNumber() string {
 	for isDigit(lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
-
-	return lexerInstance.input[position:lexerInstance.position]
+	runes := []rune(lexerInstance.input)
+	slicedRunes := runes[position:lexerInstance.position]
+	return string(slicedRunes)
 }
 
-func (lexerInstance *Lexer) peekChar() byte {
-	if lexerInstance.readPosition >= len(lexerInstance.input) {
+func (lexerInstance *Lexer) peekChar() rune {
+	runes := []rune(lexerInstance.input)
+	if lexerInstance.readPosition >= len(runes) {
 		return 0
 	} else {
-		return lexerInstance.input[lexerInstance.readPosition]
+		return runes[lexerInstance.readPosition]
 	}
 }
 
@@ -78,7 +72,6 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 	var tok token.Token
 
 	lexerInstance.consumeWhitespace()
-
 	switch lexerInstance.ch {
 	case '=':
 		if lexerInstance.peekChar() == '=' {
@@ -114,17 +107,17 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 		tok = newToken(token.SEMICOLON, lexerInstance.ch)
 	case '(':
 		tok = newToken(token.LPAREN, lexerInstance.ch)
-    case ')':
-        tok = newToken(token.RPAREN, lexerInstance.ch)
-    case ',':
-        tok = newToken(token.COMMA, lexerInstance.ch)
-    case '{':
-        tok = newToken(token.LBRACE, lexerInstance.ch)
-    case '}':
-        tok = newToken(token.RBRACE, lexerInstance.ch)
-    case 0:
-        tok.Literal = ""
-        tok.Type = token.EOF
+	case ')':
+		tok = newToken(token.RPAREN, lexerInstance.ch)
+	case ',':
+		tok = newToken(token.COMMA, lexerInstance.ch)
+	case '{':
+		tok = newToken(token.LBRACE, lexerInstance.ch)
+	case '}':
+		tok = newToken(token.RBRACE, lexerInstance.ch)
+	case 0:
+		tok.Literal = ""
+		tok.Type = token.EOF
 	default:
 		if isLetter(lexerInstance.ch) {
 			tok.Literal = lexerInstance.readIdentifier()
@@ -138,14 +131,14 @@ func (lexerInstance *Lexer) NextToken() token.Token {
 			tok = newToken(token.ILLEGAL, lexerInstance.ch)
 		}
 	}
-	// Before returning the token we advance our pointers into the 
+	// Before returning the token we advance our pointers into the
 	// input so when we call NextToken() again the lexerInstance.ch field is already updated.
 	lexerInstance.readChar()
 	return tok
 }
 
-func newToken(tokenType token.TokenType, ch byte) token.Token {
-    return token.Token{Type: tokenType, Literal: string(ch)}
+func newToken(tokenType token.TokenType, ch rune) token.Token {
+	return token.Token{Type: tokenType, Literal: string(ch)}
 }
 
 func New(input string) *Lexer {
@@ -153,12 +146,3 @@ func New(input string) *Lexer {
 	lexerInstance.readChar()
 	return lexerInstance
 }
-
-func NewUnicode(input string) *Lexer {
-	lexerInstance := &Lexer{input: input}
-	lexerInstance.readCharUnicode()
-	return lexerInstance
-}
-
-
-

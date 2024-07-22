@@ -9,10 +9,10 @@ import (
 
 func TestLetStatement(t *testing.T) {
 	input := `
-		let x = 3;
-		let y = 12;
+		бер x = 3;
+		бер y = 12;
 
-		let bishkek = 312;
+		бер bishkek = 312;
 	`
 
 	lexerInstance := lexer.New(input)
@@ -60,8 +60,8 @@ func checkParseErrors(t *testing.T, parser *Parser) {
 }
 
 func testLetStatement(t *testing.T, statement ast.Statement, name string) bool {
-	if statement.TokenLiteral() != "let" {
-		t.Errorf("statement.TokenLiteral not 'let'. got=%q", statement.TokenLiteral())
+	if statement.TokenLiteral() != "бер" {
+		t.Errorf("statement.TokenLiteral not 'бер'. got=%q", statement.TokenLiteral())
 		return false
 	}
 
@@ -85,9 +85,9 @@ func testLetStatement(t *testing.T, statement ast.Statement, name string) bool {
 
 func TestReturnStatement(t *testing.T) {
 	input := `
-		return 3;
-		return 7;
-		return 891011;
+		кайтар 3;
+		кайтар 7;
+		кайтар 891011;
 	`
 
 	lexerInstance := lexer.New(input)
@@ -108,8 +108,8 @@ func TestReturnStatement(t *testing.T) {
 			continue
 		}
 
-		if tokenLiteral := returnStatement.TokenLiteral(); tokenLiteral != "return" {
-			t.Errorf("returnStmt.TokenLiteral not 'return', got %q",
+		if tokenLiteral := returnStatement.TokenLiteral(); tokenLiteral != "кайтар" {
+			t.Errorf("returnStmt.TokenLiteral not 'кайтар', got %q",
 				tokenLiteral)
 		}
 

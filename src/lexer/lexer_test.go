@@ -7,67 +7,67 @@ import (
 )
 
 func TestNextToken(testing *testing.T) {
-	input := `let five = 5;
-	let ten = 10;
-	let add = fn(x, y) {
+	input := `бер five = 5;
+	бер ten = 10;
+	бер add = функ(x, y) {
 		x + y;
 	};
-	let result = add(five, ten);
+	бер result = add(five, ten);
 
 	!-/*5;
 	5 < 10 > 5;
 
-	if (5 < 10) {
-		return true;
-	} else {
-		return false; 
+	эгер (5 < 10) {
+		кайтар туура;
+	} же {
+		кайтар ката;
 	}
-	
+
 	10 == 10;
 	10 != 9;
-	
+
 	`
 
 	tests := []struct {
-		expectedType token.TokenType
+		expectedType    token.TokenType
 		expectedLiteral string
-	} {
-		{token.LET, "let"},
-        {token.IDENT, "five"},
-        {token.ASSIGN, "="},
-        {token.INT, "5"},
-        {token.SEMICOLON, ";"},
-        {token.LET, "let"},
-        {token.IDENT, "ten"},
-        {token.ASSIGN, "="},
-        {token.INT, "10"},
-        {token.SEMICOLON, ";"},
-        {token.LET, "let"},
-        {token.IDENT, "add"},
-        {token.ASSIGN, "="},
-        {token.FUNCTION, "fn"},
-        {token.LPAREN, "("},
-        {token.IDENT, "x"},
-        {token.COMMA, ","},
-        {token.IDENT, "y"},
-        {token.RPAREN, ")"},
-        {token.LBRACE, "{"},
-        {token.IDENT, "x"},
-        {token.PLUS, "+"},
-        {token.IDENT, "y"},
-        {token.SEMICOLON, ";"},
-        {token.RBRACE, "}"},
-        {token.SEMICOLON, ";"},
-        {token.LET, "let"},
-        {token.IDENT, "result"},
-        {token.ASSIGN, "="},
-        {token.IDENT, "add"},
+	}{
+		{token.LET, "бер"},
+		{token.IDENT, "five"},
+		{token.ASSIGN, "="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "бер"},
+		{token.IDENT, "ten"},
+		{token.ASSIGN, "="},
+		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "бер"},
+		{token.IDENT, "add"},
+		{token.ASSIGN, "="},
+		{token.FUNCTION, "функ"},
 		{token.LPAREN, "("},
-        {token.IDENT, "five"},
-        {token.COMMA, ","},
-        {token.IDENT, "ten"},
-        {token.RPAREN, ")"},
-        {token.SEMICOLON, ";"},
+		{token.IDENT, "x"},
+		{token.COMMA, ","},
+		{token.IDENT, "y"},
+		{token.RPAREN, ")"},
+		{token.LBRACE, "{"},
+		{token.IDENT, "x"},
+		{token.PLUS, "+"},
+		{token.IDENT, "y"},
+		{token.SEMICOLON, ";"},
+		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "бер"},
+		{token.IDENT, "result"},
+		{token.ASSIGN, "="},
+		{token.IDENT, "add"},
+		{token.LPAREN, "("},
+		{token.IDENT, "five"},
+		{token.COMMA, ","},
+		{token.IDENT, "ten"},
+		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
 		{token.EXCLAMATION, "!"},
 		{token.MINUS, "-"},
 		{token.SLASH, "/"},
@@ -80,21 +80,21 @@ func TestNextToken(testing *testing.T) {
 		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.IF, "if"},
+		{token.IF, "эгер"},
 		{token.LPAREN, "("},
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},
 		{token.RPAREN, ")"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "return"},
-		{token.TRUE, "true"},
+		{token.RETURN, "кайтар"},
+		{token.TRUE, "туура"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
-		{token.ELSE, "else"},
+		{token.ELSE, "же"},
 		{token.LBRACE, "{"},
-		{token.RETURN, "return"},
-		{token.FALSE, "false"},
+		{token.RETURN, "кайтар"},
+		{token.FALSE, "ката"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.INT, "10"},
@@ -105,7 +105,7 @@ func TestNextToken(testing *testing.T) {
 		{token.NOT_EQ, "!="},
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
-        {token.EOF, ""},
+		{token.EOF, ""},
 	}
 
 	lexerInstance := New(input)
@@ -114,12 +114,12 @@ func TestNextToken(testing *testing.T) {
 		tokenNext := lexerInstance.NextToken()
 
 		if tokenNext.Type != tokenTest.expectedType {
-			testing.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", 
+			testing.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
 				index, tokenTest.expectedType, tokenNext.Type)
 		}
 
 		if tokenNext.Literal != tokenTest.expectedLiteral {
-			testing.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q", 
+			testing.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
 				index, tokenTest.expectedLiteral, tokenNext.Literal)
 		}
 	}
