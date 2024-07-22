@@ -14,25 +14,34 @@ Alipp `(from alippe (алиппе) - translates from Kyrgyz as "alphabet")` is a
 
 ## Getting Started
 
-To start using Alipp, follow these simple steps:
+To start using Alipp with REPL, follow these simple steps:
 
-1. Install the Alipp compiler by running the following command:
+1. Pull this repository to your local machine by running the following command:
 
     ```
-    TOWRITE
+    git clone git@github.com:asanoviskhak/alipp.git
     ```
 
-2. Create a new Alipp file with the `.alip` extension.
+2. Run main.go file:
+
+    ```
+    go run main.go
+    ```
 
 3. Write your Alipp code using the familiar JavaScript syntax, but with Kyrgyz keywords and variable names.
 
-4. Compile your Alipp code to JavaScript by running the following command:
+      ```
+      бер облустарСаны = 7;
+      ```
+Currently, the REPL will only show the corresponding tokens of the input code. The next steps will be to implement the parser and the interpreter to run the code.
+
+(coming soon) 4. Compile your Alipp code to JavaScript by running the following command:
 
     ```
     TOWRITE
     ```
 
-5. Use the generated JavaScript file in your projects, just like any other JavaScript file.
+(coming soon) 5. Use the generated JavaScript file in your projects, just like any other JavaScript file.
 
 ## Example
 
