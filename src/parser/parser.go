@@ -8,6 +8,11 @@ import (
 	"github.com/asanoviskhak/alipp/src/token"
 )
 
+type (
+	prefixParseFunction func() ast.Expression
+	infixParseFunction  func(ast.Expression) ast.Expression
+)
+
 type Parser struct {
 	lexerInstance *lexer.Lexer
 
@@ -15,6 +20,9 @@ type Parser struct {
 	peekToken    token.Token
 
 	errors []string
+
+	prefixParseFunctions map[token.TokenType]prefixParseFunction
+	infixParseFunctions  map[token.TokenType]infixParseFunction
 }
 
 func NewParser(lexerInstance *lexer.Lexer) *Parser {
@@ -118,4 +126,12 @@ func (parser *Parser) parseReturnStatement() *ast.ReturnStatement {
 	}
 
 	return statement
+}
+
+func (parser *Parser) registerPrefix(tokenType token.TokenType, function prefixParseFunction) {
+	parser.prefixParseFunctions[tokenType] = function
+}
+
+func (parser *Parser) registerInfix(tokenType token.TokenType, function infixParseFunction) {
+	parser.infixParseFunctions[tokenType] = function
 }
