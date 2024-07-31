@@ -7,42 +7,36 @@ import (
 )
 
 func TestNextToken(testing *testing.T) {
-	input := `бер five = 5;
-	бер ten = 10;
-	бер add = функ(x, y) {
-		x + y;
-	};
-	бер result = add(five, ten);
-
-	!-/*5;
-	5 < 10 > 5;
-
-	эгер (5 < 10) {
-		кайтар туура;
-	} же {
-		кайтар ката;
-	}
-
-	10 == 10;
-	10 != 9;
-
-	`
+	input := `сакта five = 5;
+сакта ten = 10;
+сакта add = функ(x, y) {x + y;};
+сакта result = add(five, ten);
+!-/*5;
+5 < 10 > 5;
+эгер (5 < 10) {
+кайтар туура;
+} же {
+кайтар ката;
+}
+10 == 10;
+10 != 9;
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
-		{token.LET, "бер"},
+		{token.LET, "сакта"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "бер"},
+		{token.LET, "сакта"},
 		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "бер"},
+		{token.LET, "сакта"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
 		{token.FUNCTION, "функ"},
@@ -58,7 +52,7 @@ func TestNextToken(testing *testing.T) {
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
-		{token.LET, "бер"},
+		{token.LET, "сакта"},
 		{token.IDENT, "result"},
 		{token.ASSIGN, "="},
 		{token.IDENT, "add"},
@@ -112,7 +106,6 @@ func TestNextToken(testing *testing.T) {
 
 	for index, tokenTest := range tests {
 		tokenNext := lexerInstance.NextToken()
-
 		if tokenNext.Type != tokenTest.expectedType {
 			testing.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
 				index, tokenTest.expectedType, tokenNext.Type)

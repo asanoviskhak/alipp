@@ -21,31 +21,32 @@ func isDigit(ch rune) bool {
 	return unicode.IsDigit(ch)
 }
 
-func (lexerInstance *Lexer) readIdentifier() string {
-	position := lexerInstance.position
-	for isLetter(lexerInstance.ch) {
-		lexerInstance.readChar()
-	}
-	slicedRunes := lexerInstance.input[position:lexerInstance.position]
-	return string(slicedRunes)
-}
-
 func (lexerInstance *Lexer) readChar() {
-
 	if lexerInstance.readPosition >= len(lexerInstance.input) {
 		lexerInstance.ch = 0
 	} else {
 		lexerInstance.ch = lexerInstance.input[lexerInstance.readPosition]
 	}
-
 	lexerInstance.position = lexerInstance.readPosition
 	lexerInstance.readPosition += 1
 }
 
 func (lexerInstance *Lexer) consumeWhitespace() {
-	if unicode.IsSpace(lexerInstance.ch) {
+	var space_other = []*unicode.RangeTable{
+		unicode.Pattern_White_Space,
+		unicode.White_Space,
+	}
+	if unicode.IsSpace(lexerInstance.ch) || unicode.IsOneOf(space_other, lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
+}
+
+func (lexerInstance *Lexer) readIdentifier() string {
+	position := lexerInstance.position
+	for isLetter(lexerInstance.ch) {
+		lexerInstance.readChar()
+	}
+	return string(lexerInstance.input[position:lexerInstance.position])
 }
 
 func (lexerInstance *Lexer) readNumber() string {

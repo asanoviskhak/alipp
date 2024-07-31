@@ -12,7 +12,7 @@ func TestString(t *testing.T) {
 			&LetStatement{
 				Token: token.Token{
 					Type:    token.LET,
-					Literal: "бер",
+					Literal: "сакта",
 				},
 				Name: &Identifier{
 					Token: token.Token{
@@ -32,7 +32,7 @@ func TestString(t *testing.T) {
 		},
 	}
 
-	if program.String() != "бер myVar = anotherVar;" {
+	if program.String() != "сакта myVar = anotherVar;" {
 		t.Errorf("program.String() wrong. got=%q", program.String())
 	}
 }

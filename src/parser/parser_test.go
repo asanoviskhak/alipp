@@ -9,10 +9,10 @@ import (
 
 func TestLetStatement(t *testing.T) {
 	input := `
-		бер x = 3;
-		бер y = 12;
+		сакта x = 3;
+		сакта y = 12;
 
-		бер bishkek = 312;
+		сакта bishkek = 312;
 	`
 
 	lexerInstance := lexer.New(input)
@@ -60,8 +60,8 @@ func checkParseErrors(t *testing.T, parser *Parser) {
 }
 
 func testLetStatement(t *testing.T, statement ast.Statement, name string) bool {
-	if statement.TokenLiteral() != "бер" {
-		t.Errorf("statement.TokenLiteral not 'бер'. got=%q", statement.TokenLiteral())
+	if statement.TokenLiteral() != "сакта" {
+		t.Errorf("statement.TokenLiteral not 'сакта'. got=%q", statement.TokenLiteral())
 		return false
 	}
 
