@@ -9,7 +9,8 @@ import (
 	"github.com/asanoviskhak/alipp/src/token"
 )
 
-const PROMPT = ">> "
+const PROMPT = "киргизүү>> "
+const EXIT_KEYWORD = "чыгуу"
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
@@ -23,6 +24,10 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		currentLine := scanner.Text()
+		if currentLine == EXIT_KEYWORD {
+			return
+		}
+
 		lexerInstance := lexer.New(currentLine)
 
 		for tok := lexerInstance.NextToken(); tok.Type != token.EOF; tok = lexerInstance.NextToken() {

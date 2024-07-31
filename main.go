@@ -16,6 +16,6 @@ func main() {
 
 	fmt.Printf("Салам %s! Бул alipp программалоо тили!\n", user.Username)
 	fmt.Printf("Өзүңүз каалагандай тилди изилдеп көрүңүз\n\n")
-	fmt.Printf("Бул жерден чыгуу үчүн Ctrl жана C баскычтарын басыңыз\n\n")
+	fmt.Printf("Бул жерден чыгуу үчүн 'чыгуу' деп терип 'Enter' басыңыз же 'Ctrl' жана 'C' баскычтарын басыңыз\n\n")
 	repl.Start(os.Stdin, os.Stdout)
 }
