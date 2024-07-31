@@ -31,7 +31,7 @@ To start using Alipp with REPL, follow these simple steps:
 3. Write your Alipp code using the familiar JavaScript syntax, but with Kyrgyz keywords and variable names.
 
       ```
-      бер облустарСаны = 7;
+      сакта облустарСаны = 7;
       ```
 Currently, the REPL will only show the corresponding tokens of the input code. The next steps will be to implement the parser and the interpreter to run the code.
 
