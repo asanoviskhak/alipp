@@ -8,12 +8,9 @@ import (
 )
 
 func TestLetStatement(t *testing.T) {
-	input := `
-		сакта x = 3;
-		сакта y = 12;
-
-		сакта bishkek = 312;
-	`
+	input := `сакта x = 3;
+сакта y = 12;
+сакта bishkek = 312;`
 
 	lexerInstance := lexer.New(input)
 	parserInstance := NewParser(lexerInstance)
@@ -84,11 +81,9 @@ func testLetStatement(t *testing.T, statement ast.Statement, name string) bool {
 }
 
 func TestReturnStatement(t *testing.T) {
-	input := `
-		кайтар 3;
-		кайтар 7;
-		кайтар 891011;
-	`
+	input := `кайтар 3;
+кайтар 7;
+кайтар 891011;`
 
 	lexerInstance := lexer.New(input)
 	parser := NewParser(lexerInstance)
@@ -113,5 +108,36 @@ func TestReturnStatement(t *testing.T) {
 				tokenLiteral)
 		}
 
+	}
+}
+
+func TestIdentifierExpression(t *testing.T) {
+	input := "салам;"
+
+	lexer := lexer.New(input)
+	parser := NewParser(lexer)
+	program := parser.ParseProgram()
+	checkParseErrors(t, parser)
+
+	if statementsLength := len(program.Statements); statementsLength != 1 {
+		t.Fatalf("program doesn't have enough statements. got=%d", statementsLength)
+	}
+
+	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("statement is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	identifier, ok := statement.Expression.(*ast.Identifier)
+	if !ok {
+		t.Fatalf("expression is not a *ast.Identifier. got=%T", statement.Expression)
+	}
+
+	testValue := "салам"
+	if currentValue := identifier.Value; currentValue != testValue {
+		t.Errorf("identifier.Value not %s. got=%s", testValue, currentValue)
+	}
+	if currentLiteral := identifier.TokenLiteral(); currentLiteral != testValue {
+		t.Errorf("identifier.TokenLiteral() is not %s. got=%s", testValue, currentLiteral)
 	}
 }

@@ -25,11 +25,31 @@ type Parser struct {
 	infixParseFunctions  map[token.TokenType]infixParseFunction
 }
 
+// Here we use iota to give the following constants incrementing numbers as values.
+// The blank identifier _ takes the zero value and the following constants get assigned the values 1 to 7.
+// Which numbers we use doesn’t matter, but the order and the relation to each other do.
+// What we want out of these constants is to later be able to answer: “does the *
+// operator have a higher precedence than the == operator?
+// Does a prefix operator have a higher precedence than a call expression?”
+const (
+	_ int = iota
+	LOWEST
+	EQUALS      // ==
+	LESSGREATER // > or <
+	SUM         // +
+	PRODUCT     // *
+	PREFIX      // -X or !X
+	CALL        // myFunction(X)
+)
+
 func NewParser(lexerInstance *lexer.Lexer) *Parser {
 	parser := &Parser{lexerInstance: lexerInstance, errors: []string{}}
 
 	parser.nextToken()
 	parser.nextToken()
+
+	parser.prefixParseFunctions = make(map[token.TokenType]prefixParseFunction)
+	parser.registerPrefix(token.IDENT, parser.parseIdentifier)
 
 	return parser
 }
@@ -72,7 +92,7 @@ func (parser *Parser) parseStatement() ast.Statement {
 	case token.RETURN:
 		return parser.parseReturnStatement()
 	default:
-		return nil
+		return parser.parseExpressionStatement()
 	}
 }
 
@@ -96,6 +116,10 @@ func (parser *Parser) parseLetStatement() *ast.LetStatement {
 	}
 
 	return statement
+}
+
+func (parser *Parser) parseIdentifier() ast.Expression {
+	return &ast.Identifier{Token: parser.currentToken, Value: parser.currentToken.Literal}
 }
 
 func (parser *Parser) currentTokenIs(tokenType token.TokenType) bool {
@@ -134,4 +158,26 @@ func (parser *Parser) registerPrefix(tokenType token.TokenType, function prefixP
 
 func (parser *Parser) registerInfix(tokenType token.TokenType, function infixParseFunction) {
 	parser.infixParseFunctions[tokenType] = function
+}
+
+func (parser *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+	statement := &ast.ExpressionStatement{Token: parser.currentToken}
+	statement.Expression = parser.parseExpression(LOWEST)
+
+	if parser.peekTokenIs(token.SEMICOLON) {
+		parser.nextToken()
+	}
+
+	return statement
+}
+
+func (parser *Parser) parseExpression(_precedence int) ast.Expression {
+	prefix := parser.prefixParseFunctions[parser.currentToken.Type]
+
+	if prefix == nil {
+		return nil
+	}
+
+	leftExpression := prefix()
+	return leftExpression
 }
