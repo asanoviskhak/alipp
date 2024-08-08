@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/asanoviskhak/alipp/src/ast"
 	"github.com/asanoviskhak/alipp/src/lexer"
@@ -50,6 +51,7 @@ func NewParser(lexerInstance *lexer.Lexer) *Parser {
 
 	parser.prefixParseFunctions = make(map[token.TokenType]prefixParseFunction)
 	parser.registerPrefix(token.IDENT, parser.parseIdentifier)
+	parser.registerPrefix(token.INT, parser.parseIntegerLiteral)
 
 	return parser
 }
@@ -180,4 +182,20 @@ func (parser *Parser) parseExpression(_precedence int) ast.Expression {
 
 	leftExpression := prefix()
 	return leftExpression
+}
+
+func (parser *Parser) parseIntegerLiteral() ast.Expression {
+	literal := &ast.IntegerLiteral{Token: parser.currentToken}
+	value, error := strconv.ParseInt(parser.currentToken.Literal, 0, 64)
+
+	if error != nil {
+		message := fmt.Sprintf("wasn't able to parse %q as integer", parser.currentToken.Literal)
+		parser.errors = append(parser.errors, message)
+
+		return nil
+	}
+
+	literal.Value = value
+
+	return literal
 }
