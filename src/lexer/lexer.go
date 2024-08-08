@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"unicode"
+	unicode "github.com/asanoviskhak/alipp/src/helpers"
 
 	"github.com/asanoviskhak/alipp/src/token"
 )
@@ -32,11 +32,7 @@ func (lexerInstance *Lexer) readChar() {
 }
 
 func (lexerInstance *Lexer) consumeWhitespace() {
-	var space_other = []*unicode.RangeTable{
-		unicode.Pattern_White_Space,
-		unicode.White_Space,
-	}
-	if unicode.IsSpace(lexerInstance.ch) || unicode.IsOneOf(space_other, lexerInstance.ch) {
+	if unicode.IsSpace(lexerInstance.ch) {
 		lexerInstance.readChar()
 	}
 }
