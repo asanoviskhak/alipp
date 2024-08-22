@@ -1,5 +1,5 @@
 # alipp
-
+![alipp](logo/alipp.png)
 alipp `(from alippe (алиппе) - translates from Kyrgyz as "alphabet")` is a new programming language that combines the power of JavaScript with the beauty of the Kyrgyz language. With its familiar syntax and rich features, alipp aims to make programming accessible to Kyrgyz-speaking developers.
 
 ## Features
