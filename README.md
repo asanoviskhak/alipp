@@ -47,7 +47,7 @@ Currently, the REPL will only show the corresponding tokens of the input code. T
 
 Here's a simple "Hello, World!" program written in alipp:
 
-```kyrgyz
+```alipp
 көрсөтүү("Салам, Дүйнө!");
 ```
 
